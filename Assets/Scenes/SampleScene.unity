@@ -747,6 +747,7 @@ GameObject:
   - component: {fileID: 2080016682}
   - component: {fileID: 2080016681}
   - component: {fileID: 2080016680}
+  - component: {fileID: 2080016683}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -804,7 +805,7 @@ MonoBehaviour:
     m_FadeDuration: 0.1
   m_SpriteState:
     m_HighlightedSprite: {fileID: -5780042667892361423, guid: 5e77bf1703c1c9540b458a2516a0615e, type: 3}
-    m_PressedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: -5780042667892361423, guid: 5e77bf1703c1c9540b458a2516a0615e, type: 3}
     m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
@@ -856,6 +857,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2080016678}
   m_CullTransparentMesh: 1
+--- !u!114 &2080016683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080016678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95a4ed6f7635d794d9dfd10dba1e3b9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonScaler
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
