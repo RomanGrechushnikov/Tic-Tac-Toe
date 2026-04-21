@@ -10,6 +10,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource sfxSource;
     
     [Header("Audio Clips")]
+    public AudioClip newButton;
     public AudioClip buttonClick;
     public AudioClip placement;
     public AudioClip strike;
@@ -70,6 +71,12 @@ public class AudioManager : MonoBehaviour
     public bool IsBGMEnabled() => bgmEnabled;
     public bool IsSFXEnabled() => sfxEnabled;
     
+    public void PlayNewButton()
+    {
+        if (sfxEnabled && newButton != null && sfxSource != null)
+            sfxSource.PlayOneShot(newButton);
+    }
+
     public void PlayButtonClick()
     {
         if (sfxEnabled && buttonClick != null)

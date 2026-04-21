@@ -11,6 +11,7 @@ public class PopupManager : MonoBehaviour
     
     public void HideExitPopup()
     {
+        AudioManager.Instance.PlayPopupClose();
         exitPopup.SetActive(false);
     }
     

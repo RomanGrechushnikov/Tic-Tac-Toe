@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;  // ADD THIS
 
-public class ButtonScaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ButtonScaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     public Sprite normalSprite;
     public Sprite hoverSprite;
@@ -49,6 +49,14 @@ public class ButtonScaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovered = true;
+        if (AudioManager.Instance != null)
+        AudioManager.Instance.PlayNewButton();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayButtonClick();
     }
     
     public void OnPointerExit(PointerEventData eventData)

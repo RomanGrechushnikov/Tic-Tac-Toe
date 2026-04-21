@@ -579,7 +579,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3371,7 +3371,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   bgmSource: {fileID: 2016958047}
   sfxSource: {fileID: 226797840}
-  buttonClick: {fileID: 8300000, guid: 97c007f2a75a3c04881b7b36d19fe258, type: 3}
+  newButton: {fileID: 8300000, guid: 97c007f2a75a3c04881b7b36d19fe258, type: 3}
+  buttonClick: {fileID: 8300000, guid: 0a79a8914c49cd64a90b7728141643f4, type: 3}
   placement: {fileID: 8300000, guid: e4adab1ba828256488eeccbf552cf130, type: 3}
   strike: {fileID: 8300000, guid: c093fbe43ed0699478e07bd010e546c0, type: 3}
   popupOpen: {fileID: 8300000, guid: 0a79a8914c49cd64a90b7728141643f4, type: 3}
