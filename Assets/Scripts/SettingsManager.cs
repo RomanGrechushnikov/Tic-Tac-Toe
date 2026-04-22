@@ -31,6 +31,7 @@ public class SettingsManager : MonoBehaviour
     
     public void HideSettings()
     {
+        AudioManager.Instance.PlayPopupClose();
         settingsPopup.SetActive(false);
     }
     

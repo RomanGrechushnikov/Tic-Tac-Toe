@@ -2186,6 +2186,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1225657175}
   - component: {fileID: 1225657176}
+  - component: {fileID: 1225657177}
   m_Layer: 5
   m_Name: ToggleSFX
   m_TagString: Untagged
@@ -2262,6 +2263,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!114 &1225657177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1225657174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8764fca5a8a1b64687d95f420830018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleSound
 --- !u!1 &1301041385
 GameObject:
   m_ObjectHideFlags: 0
@@ -3264,6 +3277,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1856873525}
   - component: {fileID: 1856873526}
+  - component: {fileID: 1856873527}
   m_Layer: 5
   m_Name: ToggleBGM
   m_TagString: Untagged
@@ -3340,6 +3354,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+--- !u!114 &1856873527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856873524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8764fca5a8a1b64687d95f420830018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ToggleSound
 --- !u!1 &1864595149
 GameObject:
   m_ObjectHideFlags: 0

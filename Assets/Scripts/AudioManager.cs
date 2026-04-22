@@ -71,6 +71,14 @@ public class AudioManager : MonoBehaviour
     public bool IsBGMEnabled() => bgmEnabled;
     public bool IsSFXEnabled() => sfxEnabled;
     
+    public void PlayToggle()
+    {
+        bool wasMuted = sfxSource.mute;
+        sfxSource.mute = false;
+        sfxSource.PlayOneShot(newButton);
+        sfxSource.mute = wasMuted;
+    }
+    
     public void PlayNewButton()
     {
         if (sfxEnabled && newButton != null && sfxSource != null)
