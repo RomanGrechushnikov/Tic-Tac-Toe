@@ -55,6 +55,12 @@ public class ButtonScaler : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (gameObject.name == "Btn_Play")
+        {
+            ThemePopupCreator popup = FindAnyObjectByType<ThemePopupCreator>();
+            if (popup != null)
+                popup.ShowPopup();
+        }
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlayButtonClick();
     }
