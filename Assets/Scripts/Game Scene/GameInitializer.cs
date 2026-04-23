@@ -13,6 +13,8 @@ public class GameInitializer : MonoBehaviour
     private int p2Moves = 0;
     private Button[] cells;
     private string currentPlayer = "X";
+    private bool gameActive = true;
+    private GameOverPopup gameOverPopup;
     
     void Start()
     {
@@ -144,6 +146,8 @@ public class GameInitializer : MonoBehaviour
     
     void OnCellClick(int index)
     {
+        if (!gameActive) return;
+        
         Button btn = cells[index];
         Text text = btn.GetComponentInChildren<Text>();
         
@@ -164,14 +168,14 @@ public class GameInitializer : MonoBehaviour
         
         if (CheckWin())
         {
-            Debug.Log(currentPlayer + " wins!");
+            ShowGameOver(currentPlayer, Time.time - startTime);
             return;
         }
         
         int totalMoves = p1Moves + p2Moves;
         if (totalMoves >= 9)
         {
-            Debug.Log("Draw!");
+            ShowGameOver("Draw", Time.time - startTime);
             return;
         }
         
@@ -200,5 +204,19 @@ public class GameInitializer : MonoBehaviour
                 return true;
         }
         return false;
+    }
+
+    void ShowGameOver(string winner, float duration)
+    {
+        gameActive = false;
+        
+        if (gameOverPopup == null)
+        {
+            Canvas canvas = FindAnyObjectByType<Canvas>();
+            gameOverPopup = new GameObject("GameOverPopupManager").AddComponent<GameOverPopup>();
+            gameOverPopup.Create(canvas);
+        }
+        
+        gameOverPopup.ShowGameOver(winner, duration);
     }
 }
