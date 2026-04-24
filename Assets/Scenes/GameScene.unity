@@ -130,6 +130,9 @@ GameObject:
   - component: {fileID: 845110572}
   - component: {fileID: 845110571}
   - component: {fileID: 845110573}
+  - component: {fileID: 845110576}
+  - component: {fileID: 845110575}
+  - component: {fileID: 845110574}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -176,6 +179,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6108c3ed4b6e35145a0829964b37cd5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOverPopup
+--- !u!114 &845110574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845110570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 332ce01570cc72148949a5ab93e67160, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeLoader
+--- !u!114 &845110575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845110570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 711b5d874c1347449b563c164127fd05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameUIManager
+--- !u!114 &845110576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845110570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c445a8088f1c6c144bcc09bfb765cae3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoardCreator
 --- !u!1 &1372457528
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class GameInitializer : MonoBehaviour
     
     private BoardCreator board;
     private GameUIManager ui;
+    private ThemeLoader theme;
     private GameOverPopup gameOverPopup;
     
     void Start()
@@ -24,6 +25,9 @@ public class GameInitializer : MonoBehaviour
         
         board = gameObject.AddComponent<BoardCreator>();
         ui = gameObject.AddComponent<GameUIManager>();
+        theme = gameObject.AddComponent<ThemeLoader>();
+        
+        theme.LoadTheme();
         
         Canvas canvas = FindAnyObjectByType<Canvas>();
         board.CreateBoard(canvas);
@@ -66,9 +70,10 @@ public class GameInitializer : MonoBehaviour
     void OnCellClick(int index)
     {
         if (!gameActive) return;
-        if (board.cellTexts[index].text != "") return;
+        if (board.markImages[index].sprite != null) return;
         
-        board.SetMark(index, currentPlayer);
+        Sprite sprite = currentPlayer == "X" ? theme.xSprite : theme.oSprite;
+        board.SetMark(index, currentPlayer, sprite);
         
         if (currentPlayer == "X")
         {
@@ -104,7 +109,7 @@ public class GameInitializer : MonoBehaviour
     {
         string[] boardState = new string[9];
         for (int i = 0; i < 9; i++)
-            boardState[i] = board.cellTexts[i].text;
+            boardState[i] = board.hiddenTexts[i].text;
         
         int[][] patterns = new int[][]
         {

@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class ThemePopupCreator : MonoBehaviour
 {
+    public static Sprite SelectedXSprite; 
+    public static Sprite SelectedOSprite;  
     [Header("Drag X and O sprites here")]
     public Sprite theme1_X;
     public Sprite theme1_O;
@@ -167,6 +169,22 @@ public class ThemePopupCreator : MonoBehaviour
         selectedTheme = theme;
         PlayerPrefs.SetInt("SelectedTheme", theme);
         
+        if (theme == 0)
+        {
+            SelectedXSprite = theme1_X;
+            SelectedOSprite = theme1_O;
+        }
+        else if (theme == 1)
+        {
+            SelectedXSprite = theme2_X;
+            SelectedOSprite = theme2_O;
+        }
+        else if (theme == 2)
+        {
+            SelectedXSprite = theme3_X;
+            SelectedOSprite = theme3_O;
+        }
+        
         for (int i = 0; i < highlights.Length; i++)
         {
             if (highlights[i] != null)
@@ -179,7 +197,7 @@ public class ThemePopupCreator : MonoBehaviour
             startButton.GetComponent<Image>().color = Color.green;
         }
     }
-    
+
     public void ShowPopup()
     {
         if (popup == null)
