@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ThemePopupCreator : MonoBehaviour
 {
@@ -21,7 +22,6 @@ public class ThemePopupCreator : MonoBehaviour
         Canvas canvas = FindAnyObjectByType<Canvas>();
         if (canvas == null) return;
         
-        // Popup background
         popup = new GameObject("PopupTheme");
         popup.transform.SetParent(canvas.transform, false);
         RectTransform popupRect = popup.AddComponent<RectTransform>();
@@ -32,7 +32,6 @@ public class ThemePopupCreator : MonoBehaviour
         Image popupImage = popup.AddComponent<Image>();
         popupImage.color = new Color(0, 0, 0, 0.6f);
         
-        // White panel
         GameObject panel = new GameObject("ThemePanel");
         panel.transform.SetParent(popup.transform, false);
         RectTransform panelRect = panel.AddComponent<RectTransform>();
@@ -44,7 +43,6 @@ public class ThemePopupCreator : MonoBehaviour
         Image panelImage = panel.AddComponent<Image>();
         panelImage.color = Color.white;
         
-        // Title
         GameObject titleObj = new GameObject("Title", typeof(RectTransform), typeof(Text));
         titleObj.transform.SetParent(panel.transform, false);
         RectTransform titleRect = titleObj.GetComponent<RectTransform>();
@@ -61,7 +59,6 @@ public class ThemePopupCreator : MonoBehaviour
         if (titleFont != null) titleText.font = titleFont;
         titleText.color = Color.black;
         
-        // Create 3 themes
         if (theme1_X != null && theme1_O != null)
             CreateTheme(panel.transform, "Theme1", new Vector2(-280, 0), 0, theme1_X, theme1_O);
         
@@ -71,7 +68,6 @@ public class ThemePopupCreator : MonoBehaviour
         if (theme3_X != null && theme3_O != null)
             CreateTheme(panel.transform, "Theme3", new Vector2(280, 0), 2, theme3_X, theme3_O);
         
-        // Start button
         CreateStartButton(panel.transform);
     }
     
@@ -89,7 +85,6 @@ public class ThemePopupCreator : MonoBehaviour
         Image bg = theme.GetComponent<Image>();
         bg.color = new Color(0.9f, 0.9f, 0.9f);
         
-        // Highlight
         GameObject highlight = new GameObject("Highlight", typeof(RectTransform), typeof(Image));
         highlight.transform.SetParent(theme.transform, false);
         RectTransform highRect = highlight.GetComponent<RectTransform>();
@@ -101,7 +96,6 @@ public class ThemePopupCreator : MonoBehaviour
         highlight.SetActive(false);
         highlights[index] = highlight;
         
-        // X image
         GameObject xImg = new GameObject("X_Image", typeof(RectTransform), typeof(Image));
         xImg.transform.SetParent(theme.transform, false);
         RectTransform xRect = xImg.GetComponent<RectTransform>();
@@ -112,7 +106,6 @@ public class ThemePopupCreator : MonoBehaviour
         Image xImage = xImg.GetComponent<Image>();
         xImage.sprite = xSprite;
         
-        // O image
         GameObject oImg = new GameObject("O_Image", typeof(RectTransform), typeof(Image));
         oImg.transform.SetParent(theme.transform, false);
         RectTransform oRect = oImg.GetComponent<RectTransform>();
@@ -146,8 +139,9 @@ public class ThemePopupCreator : MonoBehaviour
         startButton.interactable = false;
         startButton.onClick.AddListener(() => {
             Debug.Log("Theme selected: " + selectedTheme);
-            if (popup != null)
-                popup.SetActive(false);
+            PlayerPrefs.SetInt("SelectedTheme", selectedTheme);
+            PlayerPrefs.Save();
+            SceneManager.LoadScene("GameScene");
         });
         
         GameObject textObj = new GameObject("Text", typeof(RectTransform), typeof(Text));

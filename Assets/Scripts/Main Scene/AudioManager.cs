@@ -1,117 +1,115 @@
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    
-    [Header("Audio Sources")]
-    public AudioSource bgmSource;
-    public AudioSource sfxSource;
-    
-    [Header("Audio Clips")]
-    public AudioClip newButton;
+
+    [Header("Clips")]
+    public AudioClip music;
     public AudioClip buttonClick;
-    public AudioClip placement;
-    public AudioClip strike;
-    public AudioClip popupOpen;
+    public AudioClip newButton;
     public AudioClip popupClose;
-    
-    private bool bgmEnabled = true;
-    private bool sfxEnabled = true;
-    
+    public AudioClip toggleSound;
+
+    private AudioSource bgmSource;
+    private AudioSource sfxSource;
+
+    public bool bgmEnabled = true;
+    public bool sfxEnabled = true;
+
     void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
+        if (Instance != null)
         {
             Destroy(gameObject);
+            return;
         }
-        
-        LoadSettings();
-        ApplySettings();
-    }
-    
-    void LoadSettings()
-    {
-        bgmEnabled = PlayerPrefs.GetInt("BGMEnabled", 1) == 1;
-        sfxEnabled = PlayerPrefs.GetInt("SFXEnabled", 1) == 1;
-    }
-    
-    void ApplySettings()
-    {
-        if (bgmSource != null)
-            bgmSource.mute = !bgmEnabled;
-        if (sfxSource != null)
-            sfxSource.mute = !sfxEnabled;
-    }
-    
-    public void SetBGM(bool enabled)
-    {
-        bgmEnabled = enabled;
-        PlayerPrefs.SetInt("BGMEnabled", enabled ? 1 : 0);
-        PlayerPrefs.Save();
-        if (bgmSource != null)
-            bgmSource.mute = !enabled;
-    }
-    
-    public void SetSFX(bool enabled)
-    {
-        sfxEnabled = enabled;
-        PlayerPrefs.SetInt("SFXEnabled", enabled ? 1 : 0);
-        PlayerPrefs.Save();
-        if (sfxSource != null)
-            sfxSource.mute = !enabled;
-    }
-    
-    public bool IsBGMEnabled() => bgmEnabled;
-    public bool IsSFXEnabled() => sfxEnabled;
-    
-    public void PlayToggle()
-    {
-        bool wasMuted = sfxSource.mute;
-        sfxSource.mute = false;
-        sfxSource.PlayOneShot(newButton);
-        sfxSource.mute = wasMuted;
-    }
-    
-    public void PlayNewButton()
-    {
-        if (sfxEnabled && newButton != null && sfxSource != null)
-            sfxSource.PlayOneShot(newButton);
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        CreateAudioSources();
     }
 
-    public void PlayButtonClick()
+    void CreateAudioSources()
     {
-        if (sfxEnabled && buttonClick != null)
-            sfxSource.PlayOneShot(buttonClick);
+        GameObject bgmObj = new GameObject("BGM_Source");
+        bgmObj.transform.SetParent(transform);
+        bgmSource = bgmObj.AddComponent<AudioSource>();
+        bgmSource.loop = true;
+        bgmSource.playOnAwake = false;
+
+        GameObject sfxObj = new GameObject("SFX_Source");
+        sfxObj.transform.SetParent(transform);
+        sfxSource = sfxObj.AddComponent<AudioSource>();
+        sfxSource.loop = false;
+        sfxSource.playOnAwake = false;
     }
-    
-    public void PlayPlacement()
+
+    void Start()
     {
-        if (sfxEnabled && placement != null)
-            sfxSource.PlayOneShot(placement);
+        PlayMusic();
     }
-    
-    public void PlayStrike()
+
+    // =========================
+    // 🎵 BGM
+    // =========================
+
+    public void PlayMusic()
     {
-        if (sfxEnabled && strike != null)
-            sfxSource.PlayOneShot(strike);
+        if (!bgmEnabled || music == null) return;
+
+        bgmSource.clip = music;
+        bgmSource.Play();
     }
-    
-    public void PlayPopupOpen()
+
+    public void StopMusic()
     {
-        if (sfxEnabled && popupOpen != null)
-            sfxSource.PlayOneShot(popupOpen);
+        bgmSource.Stop();
     }
-    
-    public void PlayPopupClose()
+
+    public void ToggleBGM(bool state)
     {
-        if (sfxEnabled && popupClose != null)
-            sfxSource.PlayOneShot(popupClose);
+        bgmEnabled = state;
+
+        if (state) PlayMusic();
+        else StopMusic();
     }
+
+    // alias for UI compatibility
+    public void SetBGM(bool state)
+    {
+        ToggleBGM(state);
+    }
+
+    // =========================
+    // 🔊 SFX
+    // =========================
+
+    public void PlaySFX(AudioClip clip)
+    {
+        if (!sfxEnabled || clip == null) return;
+
+        sfxSource.PlayOneShot(clip);
+    }
+
+    public void ToggleSFX(bool state)
+    {
+        sfxEnabled = state;
+    }
+
+    // alias for UI compatibility
+    public void SetSFX(bool state)
+    {
+        ToggleSFX(state);
+    }
+
+    // =========================
+    // 🔘 Helpers
+    // =========================
+
+    public void PlayButtonClick() => PlaySFX(buttonClick);
+    public void PlayNewButton() => PlaySFX(newButton);
+    public void PlayPopupClose() => PlaySFX(popupClose);
+    public void PlayToggle() => PlaySFX(toggleSound);
 }

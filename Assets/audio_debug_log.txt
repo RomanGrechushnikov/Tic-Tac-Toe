@@ -1,0 +1,34 @@
+=== AUDIO DEBUG START ===
+
+--- SYSTEM ---
+AudioManager: FOUND
+AudioListener: Main Camera
+Listener Enabled: True
+
+--- MUSIC ---
+BGM Enabled: True
+Music Clip: music
+
+--- AUDIO SOURCES ---
+Count: 2
+
+Object: SFX_Source
+Playing: False
+Clip: NULL
+Volume: 1
+Mute: False
+Loop: False
+Spatial: 0
+
+Object: BGM_Source
+Playing: True
+Clip: music
+Volume: 1
+Mute: False
+Loop: True
+Spatial: 0
+
+--- AUDIO TEST ---
+❌ TEST CLIP NOT ASSIGNED
+
+=== END ===
