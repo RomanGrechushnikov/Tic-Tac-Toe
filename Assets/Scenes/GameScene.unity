@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 845110576}
   - component: {fileID: 845110575}
   - component: {fileID: 845110574}
+  - component: {fileID: 845110577}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -215,6 +216,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c445a8088f1c6c144bcc09bfb765cae3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoardCreator
+--- !u!114 &845110577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 845110570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa7416c21532604caf9eef0f39cbb31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameSettingsUI
 --- !u!1 &1372457528
 GameObject:
   m_ObjectHideFlags: 0
