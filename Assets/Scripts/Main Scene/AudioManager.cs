@@ -14,8 +14,8 @@ public class AudioManager : MonoBehaviour
     private AudioSource bgmSource;
     private AudioSource sfxSource;
 
-    public bool bgmEnabled = true;
-    public bool sfxEnabled = true;
+    [HideInInspector] public bool bgmEnabled = true;
+    [HideInInspector] public bool sfxEnabled = true;
 
     void Awake()
     {
@@ -48,6 +48,12 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
+        // 1. Load saved preferences before doing anything else
+        // (1 = enabled, 0 = disabled. Default to 1)
+        bgmEnabled = PlayerPrefs.GetInt("BGM_On", 1) == 1;
+        sfxEnabled = PlayerPrefs.GetInt("SFX_On", 1) == 1;
+
+        // 2. Now PlayMusic will respect the loaded bgmEnabled state
         PlayMusic();
     }
 
@@ -68,19 +74,26 @@ public class AudioManager : MonoBehaviour
         bgmSource.Stop();
     }
 
-    public void ToggleBGM(bool state)
-    {
-        bgmEnabled = state;
-
-        if (state) PlayMusic();
-        else StopMusic();
-    }
-
-    // alias for UI compatibility
     public void SetBGM(bool state)
     {
-        ToggleBGM(state);
+        bgmEnabled = state;
+        
+        // Save choice to disk
+        PlayerPrefs.SetInt("BGM_On", state ? 1 : 0);
+        PlayerPrefs.Save();
+
+        if (state) 
+        {
+            if (!bgmSource.isPlaying) PlayMusic();
+        }
+        else 
+        {
+            StopMusic();
+        }
     }
+
+    // Alias for Toggle
+    public void ToggleBGM(bool state) => SetBGM(state);
 
     // =========================
     // 🔊 SFX
@@ -93,16 +106,17 @@ public class AudioManager : MonoBehaviour
         sfxSource.PlayOneShot(clip);
     }
 
-    public void ToggleSFX(bool state)
-    {
-        sfxEnabled = state;
-    }
-
-    // alias for UI compatibility
     public void SetSFX(bool state)
     {
-        ToggleSFX(state);
+        sfxEnabled = state;
+
+        // Save choice to disk
+        PlayerPrefs.SetInt("SFX_On", state ? 1 : 0);
+        PlayerPrefs.Save();
     }
+
+    // Alias for Toggle
+    public void ToggleSFX(bool state) => SetSFX(state);
 
     // =========================
     // 🔘 Helpers
