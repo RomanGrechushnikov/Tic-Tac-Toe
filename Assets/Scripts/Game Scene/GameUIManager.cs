@@ -10,36 +10,38 @@ public class GameUIManager : MonoBehaviour
     
     public void CreateHUD(Canvas canvas)
     {
-        // 1. Create Timer
-        timerText = CreateTextElement(canvas.transform, "Timer", "Time: 0.0", new Vector2(0, -50));
+        // P1 Moves (Top-Left)
+        p1MovesText = CreateHUDText(canvas, "P1Moves", new Vector2(0, 1), new Vector2(0, 1), new Vector2(200, -20), "P1 (X): 0");
+        p1MovesText.alignment = TextAnchor.MiddleLeft;
 
-        // 2. Create P1 Move Count
-        p1MovesText = CreateTextElement(canvas.transform, "P1Moves", "P1 (X): 0", new Vector2(-200, -50));
+        // Timer (Top-Center)
+        timerText = CreateHUDText(canvas, "Timer", new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0, -20), "Time: 0.0");
+        timerText.alignment = TextAnchor.MiddleCenter;
 
-        // 3. Create P2 Move Count
-        p2MovesText = CreateTextElement(canvas.transform, "P2Moves", "P2 (O): 0", new Vector2(200, -50));
+        // P2 Moves (Top-Right)
+        p2MovesText = CreateHUDText(canvas, "P2Moves", new Vector2(1, 1), new Vector2(1, 1), new Vector2(-200, -20), "P2 (O): 0");
+        p2MovesText.alignment = TextAnchor.MiddleRight;
 
-        // 4. Create the Exit Button
         CreateExitButton(canvas);
     }
 
-    Text CreateTextElement(Transform parent, string name, string initialText, Vector2 pos)
+    private Text CreateHUDText(Canvas canvas, string name, Vector2 anchor, Vector2 pivot, Vector2 pos, string defaultText)
     {
         GameObject obj = new GameObject(name, typeof(RectTransform), typeof(Text));
-        obj.transform.SetParent(parent, false);
-        
-        Text t = obj.GetComponent<Text>();
-        t.text = initialText;
-        t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        t.fontSize = 24;
-        t.alignment = TextAnchor.UpperCenter;
-        t.color = Color.white;
+        obj.transform.SetParent(canvas.transform, false);
         
         RectTransform rect = obj.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0.5f, 1);
-        rect.anchorMax = new Vector2(0.5f, 1);
+        rect.anchorMin = anchor;
+        rect.anchorMax = anchor;
+        rect.pivot = pivot;
         rect.anchoredPosition = pos;
-        rect.sizeDelta = new Vector2(200, 50);
+        rect.sizeDelta = new Vector2(250, 50);
+
+        Text t = obj.GetComponent<Text>();
+        t.text = defaultText;
+        t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        t.fontSize = 28;
+        t.color = Color.white;
         
         return t;
     }
@@ -52,28 +54,20 @@ public class GameUIManager : MonoBehaviour
         RectTransform rect = btnObj.GetComponent<RectTransform>();
         rect.anchorMin = new Vector2(0, 1);
         rect.anchorMax = new Vector2(0, 1);
-        rect.anchoredPosition = new Vector2(70, -40);
-        rect.sizeDelta = new Vector2(80, 40);
+        rect.pivot = new Vector2(0, 1);
+        rect.anchoredPosition = new Vector2(20, -20);
+        rect.sizeDelta = new Vector2(100, 40);
 
-        btnObj.GetComponent<Image>().color = new Color(0.8f, 0.2f, 0.2f, 1f);
+        btnObj.GetComponent<Image>().color = new Color(0.7f, 0.2f, 0.2f, 1f);
+        btnObj.GetComponent<Button>().onClick.AddListener(() => SceneManager.LoadScene("SampleScene"));
 
-        Button btn = btnObj.GetComponent<Button>();
-        btn.onClick.AddListener(() => {
-            if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonClick);
-            SceneManager.LoadScene("SampleScene"); 
-        });
-
-        GameObject txtObj = new GameObject("Text", typeof(RectTransform), typeof(Text));
-        txtObj.transform.SetParent(btnObj.transform, false);
-        Text t = txtObj.GetComponent<Text>();
+        GameObject textObj = new GameObject("Text", typeof(RectTransform), typeof(Text));
+        textObj.transform.SetParent(btnObj.transform, false);
+        Text t = textObj.GetComponent<Text>();
         t.text = "EXIT";
         t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         t.alignment = TextAnchor.MiddleCenter;
         t.color = Color.white;
-        
-        RectTransform tRect = txtObj.GetComponent<RectTransform>();
-        tRect.anchorMin = Vector2.zero;
-        tRect.anchorMax = Vector2.one;
-        tRect.sizeDelta = Vector2.zero;
+        ((RectTransform)textObj.transform).sizeDelta = rect.sizeDelta;
     }
 }

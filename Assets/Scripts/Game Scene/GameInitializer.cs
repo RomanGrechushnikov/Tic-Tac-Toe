@@ -20,37 +20,26 @@ public class GameInitializer : MonoBehaviour
     void Start()
     {
         startTime = Time.time;
-        
         CreateCanvas();
         CreateEventSystem();
         
-        // 1. Initialize Components
         board = gameObject.AddComponent<BoardCreator>();
         ui = gameObject.AddComponent<GameUIManager>();
         theme = gameObject.AddComponent<ThemeLoader>();
-        
-        // Add the custom Settings UI
         gameObject.AddComponent<GameSettingsUI>();
         
-        // 2. Load Assets
         theme.LoadTheme();
-        
         Canvas canvas = FindAnyObjectByType<Canvas>();
         
-        // 3. Create the Board and HUD (HUD now contains the EXIT button)
         board.CreateBoard(canvas);
         ui.CreateHUD(canvas);
         
-        // 4. Set up click listeners for the cells
         if (board.cells != null)
         {
             for (int i = 0; i < 9; i++)
             {
                 int idx = i;
-                if (board.cells[idx] != null)
-                {
-                    board.cells[idx].onClick.AddListener(() => OnCellClick(idx));
-                }
+                board.cells[idx].onClick.AddListener(() => OnCellClick(idx));
             }
         }
     }
@@ -59,33 +48,25 @@ public class GameInitializer : MonoBehaviour
     {
         if (!gameActive || board.hiddenTexts[index].text != "") return;
 
-        // Play Sound
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonClick);
 
         Sprite moveSprite = (currentPlayer == "X") ? theme.xSprite : theme.oSprite;
         board.SetMark(index, currentPlayer, moveSprite);
 
-        if (currentPlayer == "X") p1Moves++;
-        else p2Moves++;
+        if (currentPlayer == "X") p1Moves++; else p2Moves++;
 
-        // Update HUD
+        // Update HUD safely
         if (ui.p1MovesText != null) ui.p1MovesText.text = $"P1 (X): {p1Moves}";
         if (ui.p2MovesText != null) ui.p2MovesText.text = $"P2 (O): {p2Moves}";
 
-        // --- YOUR STABLE WIN CHECK ---
         int[] winningPattern = GetWinningPattern();
         if (winningPattern != null)
         {
             gameActive = false;
             float duration = Time.time - startTime;
-            
-            // Trigger the pulsing animation
             WinAnimation.AnimateWin(board.cells, winningPattern);
-            
-            // SAVE STATS (Using your GameStatsSaver script)
-            GameStatsSaver.SaveGameResult(currentPlayer, duration);
-            
+            GameStatsSaver.SaveGameResult(currentPlayer, duration); // Using central saver
             Invoke("DelayedGameOver", 1.5f);
             return;
         }
@@ -112,12 +93,10 @@ public class GameInitializer : MonoBehaviour
         if (gameOverPopup == null)
             gameOverPopup = gameObject.AddComponent<GameOverPopup>();
         
-        Canvas canvas = FindAnyObjectByType<Canvas>();
-        gameOverPopup.Create(canvas);
+        gameOverPopup.Create(FindAnyObjectByType<Canvas>());
         gameOverPopup.ShowGameOver(winner, duration);
     }
 
-    // YOUR STABLE LOGIC: Checked and preserved
     int[] GetWinningPattern()
     {
         string[] boardState = new string[9];
@@ -145,9 +124,7 @@ public class GameInitializer : MonoBehaviour
     {
         if (FindAnyObjectByType<Canvas>() != null) return;
         GameObject canvasObj = new GameObject("Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
-        Canvas canvas = canvasObj.GetComponent<Canvas>();
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvasObj.GetComponent<CanvasScaler>().uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        canvasObj.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
     }
 
     void CreateEventSystem()
@@ -160,8 +137,7 @@ public class GameInitializer : MonoBehaviour
     {
         if (gameActive && ui != null && ui.timerText != null)
         {
-            float elapsed = Time.time - startTime;
-            ui.timerText.text = "Time: " + elapsed.ToString("F1");
+            ui.timerText.text = "Time: " + (Time.time - startTime).ToString("F1");
         }
     }
 }
