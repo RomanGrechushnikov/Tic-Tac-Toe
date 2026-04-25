@@ -37,7 +37,7 @@ public class GameInitializer : MonoBehaviour
         
         Canvas canvas = FindAnyObjectByType<Canvas>();
         
-        // 3. Create the Board
+        // 3. Create the Board and HUD (HUD now contains the EXIT button)
         board.CreateBoard(canvas);
         ui.CreateHUD(canvas);
         
@@ -59,7 +59,7 @@ public class GameInitializer : MonoBehaviour
     {
         if (!gameActive || board.hiddenTexts[index].text != "") return;
 
-        // Play Sound from your AudioManager
+        // Play Sound
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonClick);
 
@@ -69,9 +69,11 @@ public class GameInitializer : MonoBehaviour
         if (currentPlayer == "X") p1Moves++;
         else p2Moves++;
 
-        ui.p1MovesText.text = $"P1 (X): {p1Moves}";
-        ui.p2MovesText.text = $"P2 (O): {p2Moves}";
+        // Update HUD
+        if (ui.p1MovesText != null) ui.p1MovesText.text = $"P1 (X): {p1Moves}";
+        if (ui.p2MovesText != null) ui.p2MovesText.text = $"P2 (O): {p2Moves}";
 
+        // --- YOUR STABLE WIN CHECK ---
         int[] winningPattern = GetWinningPattern();
         if (winningPattern != null)
         {
@@ -81,7 +83,9 @@ public class GameInitializer : MonoBehaviour
             // Trigger the pulsing animation
             WinAnimation.AnimateWin(board.cells, winningPattern);
             
-            SaveStats(currentPlayer, duration);
+            // SAVE STATS (Using your GameStatsSaver script)
+            GameStatsSaver.SaveGameResult(currentPlayer, duration);
+            
             Invoke("DelayedGameOver", 1.5f);
             return;
         }
@@ -90,29 +94,12 @@ public class GameInitializer : MonoBehaviour
         {
             gameActive = false;
             float duration = Time.time - startTime;
-            SaveStats("Draw", duration);
+            GameStatsSaver.SaveGameResult("Draw", duration);
             ShowGameOver("Draw", duration);
             return;
         }
         
         currentPlayer = (currentPlayer == "X") ? "O" : "X";
-    }
-
-    void SaveStats(string winner, float duration)
-    {
-        int total = PlayerPrefs.GetInt("TotalGames", 0) + 1;
-        PlayerPrefs.SetInt("TotalGames", total);
-
-        if (winner == "X")
-            PlayerPrefs.SetInt("P1Wins", PlayerPrefs.GetInt("P1Wins", 0) + 1);
-        else if (winner == "O")
-            PlayerPrefs.SetInt("P2Wins", PlayerPrefs.GetInt("P2Wins", 0) + 1);
-        else
-            PlayerPrefs.SetInt("Draws", PlayerPrefs.GetInt("Draws", 0) + 1);
-
-        float totalTime = PlayerPrefs.GetFloat("TotalDuration", 0f) + duration;
-        PlayerPrefs.SetFloat("TotalDuration", totalTime);
-        PlayerPrefs.Save();
     }
 
     void DelayedGameOver()
@@ -130,6 +117,7 @@ public class GameInitializer : MonoBehaviour
         gameOverPopup.ShowGameOver(winner, duration);
     }
 
+    // YOUR STABLE LOGIC: Checked and preserved
     int[] GetWinningPattern()
     {
         string[] boardState = new string[9];

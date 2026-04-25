@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameUIManager : MonoBehaviour
 {
@@ -9,46 +10,70 @@ public class GameUIManager : MonoBehaviour
     
     public void CreateHUD(Canvas canvas)
     {
-        // Timer
-        GameObject timerObj = new GameObject("TimerText", typeof(RectTransform), typeof(Text));
-        timerObj.transform.SetParent(canvas.transform, false);
-        RectTransform timerRect = timerObj.GetComponent<RectTransform>();
-        timerRect.anchorMin = new Vector2(1, 1);
-        timerRect.anchorMax = new Vector2(1, 1);
-        timerRect.anchoredPosition = new Vector2(-100, -50);
-        timerRect.sizeDelta = new Vector2(200, 50);
-        timerText = timerObj.GetComponent<Text>();
-        timerText.text = "Time: 0.0";
-        timerText.fontSize = 24;
-        timerText.alignment = TextAnchor.MiddleRight;
-        timerText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        // 1. Create Timer
+        timerText = CreateTextElement(canvas.transform, "Timer", "Time: 0.0", new Vector2(0, -50));
+
+        // 2. Create P1 Move Count
+        p1MovesText = CreateTextElement(canvas.transform, "P1Moves", "P1 (X): 0", new Vector2(-200, -50));
+
+        // 3. Create P2 Move Count
+        p2MovesText = CreateTextElement(canvas.transform, "P2Moves", "P2 (O): 0", new Vector2(200, -50));
+
+        // 4. Create the Exit Button
+        CreateExitButton(canvas);
+    }
+
+    Text CreateTextElement(Transform parent, string name, string initialText, Vector2 pos)
+    {
+        GameObject obj = new GameObject(name, typeof(RectTransform), typeof(Text));
+        obj.transform.SetParent(parent, false);
         
-        // Player 1 moves
-        GameObject p1Obj = new GameObject("P1MovesText", typeof(RectTransform), typeof(Text));
-        p1Obj.transform.SetParent(canvas.transform, false);
-        RectTransform p1Rect = p1Obj.GetComponent<RectTransform>();
-        p1Rect.anchorMin = new Vector2(0, 1);
-        p1Rect.anchorMax = new Vector2(0, 1);
-        p1Rect.anchoredPosition = new Vector2(100, -100);
-        p1Rect.sizeDelta = new Vector2(150, 50);
-        p1MovesText = p1Obj.GetComponent<Text>();
-        p1MovesText.text = "P1 (X): 0";
-        p1MovesText.fontSize = 24;
-        p1MovesText.alignment = TextAnchor.MiddleLeft;
-        p1MovesText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        Text t = obj.GetComponent<Text>();
+        t.text = initialText;
+        t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        t.fontSize = 24;
+        t.alignment = TextAnchor.UpperCenter;
+        t.color = Color.white;
         
-        // Player 2 moves
-        GameObject p2Obj = new GameObject("P2MovesText", typeof(RectTransform), typeof(Text));
-        p2Obj.transform.SetParent(canvas.transform, false);
-        RectTransform p2Rect = p2Obj.GetComponent<RectTransform>();
-        p2Rect.anchorMin = new Vector2(0, 1);
-        p2Rect.anchorMax = new Vector2(0, 1);
-        p2Rect.anchoredPosition = new Vector2(100, -160);
-        p2Rect.sizeDelta = new Vector2(150, 50);
-        p2MovesText = p2Obj.GetComponent<Text>();
-        p2MovesText.text = "P2 (O): 0";
-        p2MovesText.fontSize = 24;
-        p2MovesText.alignment = TextAnchor.MiddleLeft;
-        p2MovesText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        RectTransform rect = obj.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.5f, 1);
+        rect.anchorMax = new Vector2(0.5f, 1);
+        rect.anchoredPosition = pos;
+        rect.sizeDelta = new Vector2(200, 50);
+        
+        return t;
+    }
+
+    void CreateExitButton(Canvas canvas)
+    {
+        GameObject btnObj = new GameObject("ExitButton", typeof(RectTransform), typeof(Image), typeof(Button));
+        btnObj.transform.SetParent(canvas.transform, false);
+        
+        RectTransform rect = btnObj.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0, 1);
+        rect.anchorMax = new Vector2(0, 1);
+        rect.anchoredPosition = new Vector2(70, -40);
+        rect.sizeDelta = new Vector2(80, 40);
+
+        btnObj.GetComponent<Image>().color = new Color(0.8f, 0.2f, 0.2f, 1f);
+
+        Button btn = btnObj.GetComponent<Button>();
+        btn.onClick.AddListener(() => {
+            if (AudioManager.Instance != null) AudioManager.Instance.PlaySFX(AudioManager.Instance.buttonClick);
+            SceneManager.LoadScene("SampleScene"); 
+        });
+
+        GameObject txtObj = new GameObject("Text", typeof(RectTransform), typeof(Text));
+        txtObj.transform.SetParent(btnObj.transform, false);
+        Text t = txtObj.GetComponent<Text>();
+        t.text = "EXIT";
+        t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        t.alignment = TextAnchor.MiddleCenter;
+        t.color = Color.white;
+        
+        RectTransform tRect = txtObj.GetComponent<RectTransform>();
+        tRect.anchorMin = Vector2.zero;
+        tRect.anchorMax = Vector2.one;
+        tRect.sizeDelta = Vector2.zero;
     }
 }
