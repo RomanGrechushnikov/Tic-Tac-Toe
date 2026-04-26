@@ -10,7 +10,6 @@ Library: C:\2D\Tic-Tac-Toe\Temp\BurstOutput\Data\Plugins\lib_burst_generated
 --target-framework=NetFramework
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\2D\Tic-Tac-Toe\Temp\Burst
---debug=Full
 --generate-static-linkage-methods
 --key-folder=C:/Program Files/Unity/Hub/Editor/6000.4.3f1/Editor/Data/PlaybackEngines/WebGLSupport
 --decode-folder=C:\2D\Tic-Tac-Toe\Library\Burst
@@ -128,7 +127,6 @@ Library: C:\2D\Tic-Tac-Toe\Temp\BurstOutput\Data\Plugins\lib_burst_generated
 --target-framework=NetFramework
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\2D\Tic-Tac-Toe\Temp\Burst
---debug=Full
 --generate-static-linkage-methods
 --key-folder=C:/Program Files/Unity/Hub/Editor/6000.4.3f1/Editor/Data/PlaybackEngines/WebGLSupport
 --decode-folder=C:\2D\Tic-Tac-Toe\Library\Burst
@@ -165,7 +163,6 @@ Library: C:\2D\Tic-Tac-Toe\Temp\BurstOutput\Data\Plugins\lib_burst_generated
 --float-mode=Fast
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=C:\2D\Tic-Tac-Toe\Temp\Burst
---debug=Full
 --generate-static-linkage-methods
 --key-folder=C:/Program Files/Unity/Hub/Editor/6000.4.3f1/Editor/Data/PlaybackEngines/WebGLSupport
 --decode-folder=C:\2D\Tic-Tac-Toe\Library\Burst
