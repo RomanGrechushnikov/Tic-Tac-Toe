@@ -40,7 +40,7 @@ public class GameUIManager : MonoBehaviour
         Text t = obj.GetComponent<Text>();
         t.text = defaultText;
         t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        t.fontSize = 28;
+        t.fontSize = 22;
         t.color = Color.white;
         
         return t;
