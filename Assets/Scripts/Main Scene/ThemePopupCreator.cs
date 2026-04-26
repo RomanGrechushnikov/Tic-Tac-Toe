@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro; // Added for style consistency
 
 public class ThemePopupCreator : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class ThemePopupCreator : MonoBehaviour
         popupRect.sizeDelta = Vector2.zero;
         
         Image popupImage = popup.AddComponent<Image>();
-        popupImage.color = new Color(0, 0, 0, 0.6f);
+        popupImage.color = new Color(0, 0, 0, 0.7f); // Darker overlay to match ExitPopup
         
         GameObject panel = new GameObject("ThemePanel");
         panel.transform.SetParent(popup.transform, false);
@@ -43,32 +44,30 @@ public class ThemePopupCreator : MonoBehaviour
         panelRect.anchoredPosition = Vector2.zero;
         
         Image panelImage = panel.AddComponent<Image>();
-        panelImage.color = Color.white;
+        // Using the dark blue-ish grey from StatsPopup
+        panelImage.color = new Color(0.12f, 0.12f, 0.15f, 1f); 
         
-        GameObject titleObj = new GameObject("Title", typeof(RectTransform), typeof(Text));
+        // Switched Title to TextMeshPro for sharp visuals
+        GameObject titleObj = new GameObject("Title", typeof(RectTransform), typeof(TextMeshProUGUI));
         titleObj.transform.SetParent(panel.transform, false);
         RectTransform titleRect = titleObj.GetComponent<RectTransform>();
-        titleRect.anchorMin = new Vector2(0.5f, 0.5f);
-        titleRect.anchorMax = new Vector2(0.5f, 0.5f);
         titleRect.sizeDelta = new Vector2(400, 80);
-        titleRect.anchoredPosition = new Vector2(0, 220);
+        titleRect.anchoredPosition = new Vector2(0, 230);
         
-        Text titleText = titleObj.GetComponent<Text>();
+        TextMeshProUGUI titleText = titleObj.GetComponent<TextMeshProUGUI>();
         titleText.text = "CHOOSE THEME";
         titleText.fontSize = 48;
-        titleText.alignment = TextAnchor.MiddleCenter;
-        Font titleFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        if (titleFont != null) titleText.font = titleFont;
-        titleText.color = Color.black;
+        titleText.alignment = TextAlignmentOptions.Center;
+        titleText.color = Color.yellow; // Yellow title to match StatsPopup
         
         if (theme1_X != null && theme1_O != null)
-            CreateTheme(panel.transform, "Theme1", new Vector2(-280, 0), 0, theme1_X, theme1_O);
+            CreateTheme(panel.transform, "Theme1", new Vector2(-280, 20), 0, theme1_X, theme1_O);
         
         if (theme2_X != null && theme2_O != null)
-            CreateTheme(panel.transform, "Theme2", new Vector2(0, 0), 1, theme2_X, theme2_O);
+            CreateTheme(panel.transform, "Theme2", new Vector2(0, 20), 1, theme2_X, theme2_O);
         
         if (theme3_X != null && theme3_O != null)
-            CreateTheme(panel.transform, "Theme3", new Vector2(280, 0), 2, theme3_X, theme3_O);
+            CreateTheme(panel.transform, "Theme3", new Vector2(280, 20), 2, theme3_X, theme3_O);
         
         CreateStartButton(panel.transform);
     }
@@ -79,48 +78,40 @@ public class ThemePopupCreator : MonoBehaviour
         theme.transform.SetParent(parent, false);
         
         RectTransform rect = theme.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0.5f, 0.5f);
-        rect.anchorMax = new Vector2(0.5f, 0.5f);
-        rect.sizeDelta = new Vector2(180, 180);
+        rect.sizeDelta = new Vector2(220, 220); // Slightly larger cards
         rect.anchoredPosition = position;
         
         Image bg = theme.GetComponent<Image>();
-        bg.color = new Color(0.9f, 0.9f, 0.9f);
+        bg.color = new Color(0.2f, 0.2f, 0.25f, 1f); // Darker card background
         
         GameObject highlight = new GameObject("Highlight", typeof(RectTransform), typeof(Image));
         highlight.transform.SetParent(theme.transform, false);
         RectTransform highRect = highlight.GetComponent<RectTransform>();
         highRect.anchorMin = Vector2.zero;
         highRect.anchorMax = Vector2.one;
-        highRect.sizeDelta = Vector2.zero;
+        highRect.sizeDelta = new Vector2(10, 10); // Thicker selection border
         Image highImg = highlight.GetComponent<Image>();
-        highImg.color = Color.yellow;
+        highImg.color = Color.green; // Changed yellow highlight to green for "selection" feel
         highlight.SetActive(false);
         highlights[index] = highlight;
         
-        GameObject xImg = new GameObject("X_Image", typeof(RectTransform), typeof(Image));
-        xImg.transform.SetParent(theme.transform, false);
-        RectTransform xRect = xImg.GetComponent<RectTransform>();
-        xRect.anchorMin = new Vector2(0.5f, 0.5f);
-        xRect.anchorMax = new Vector2(0.5f, 0.5f);
-        xRect.sizeDelta = new Vector2(70, 70);
-        xRect.anchoredPosition = new Vector2(-45, 0);
-        Image xImage = xImg.GetComponent<Image>();
-        xImage.sprite = xSprite;
-        
-        GameObject oImg = new GameObject("O_Image", typeof(RectTransform), typeof(Image));
-        oImg.transform.SetParent(theme.transform, false);
-        RectTransform oRect = oImg.GetComponent<RectTransform>();
-        oRect.anchorMin = new Vector2(0.5f, 0.5f);
-        oRect.anchorMax = new Vector2(0.5f, 0.5f);
-        oRect.sizeDelta = new Vector2(70, 70);
-        oRect.anchoredPosition = new Vector2(45, 0);
-        Image oImage = oImg.GetComponent<Image>();
-        oImage.sprite = oSprite;
+        // Preview Icons
+        CreatePreviewIcon(theme.transform, xSprite, new Vector2(-50, 0));
+        CreatePreviewIcon(theme.transform, oSprite, new Vector2(50, 0));
         
         Button btn = theme.GetComponent<Button>();
         int idx = index;
         btn.onClick.AddListener(() => SelectTheme(idx));
+    }
+
+    void CreatePreviewIcon(Transform parent, Sprite sprite, Vector2 pos)
+    {
+        GameObject imgObj = new GameObject("Icon", typeof(RectTransform), typeof(Image));
+        imgObj.transform.SetParent(parent, false);
+        RectTransform rect = imgObj.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(80, 80);
+        rect.anchoredPosition = pos;
+        imgObj.GetComponent<Image>().sprite = sprite;
     }
     
     void CreateStartButton(Transform parent)
@@ -129,38 +120,29 @@ public class ThemePopupCreator : MonoBehaviour
         startBtn.transform.SetParent(parent, false);
         
         RectTransform rect = startBtn.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0.5f, 0.5f);
-        rect.anchorMax = new Vector2(0.5f, 0.5f);
-        rect.sizeDelta = new Vector2(250, 60);
-        rect.anchoredPosition = new Vector2(0, -220);
+        rect.sizeDelta = new Vector2(300, 70); // Wider button
+        rect.anchoredPosition = new Vector2(0, -230);
         
         Image btnImage = startBtn.GetComponent<Image>();
-        btnImage.color = Color.gray;
+        btnImage.color = new Color(0.4f, 0.4f, 0.4f); // Grey default
         
         startButton = startBtn.GetComponent<Button>();
         startButton.interactable = false;
         startButton.onClick.AddListener(() => {
-            Debug.Log("Theme selected: " + selectedTheme);
             PlayerPrefs.SetInt("SelectedTheme", selectedTheme);
             PlayerPrefs.Save();
             SceneManager.LoadScene("GameScene");
         });
         
-        GameObject textObj = new GameObject("Text", typeof(RectTransform), typeof(Text));
+        GameObject textObj = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
         textObj.transform.SetParent(startBtn.transform, false);
-        
         RectTransform textRect = textObj.GetComponent<RectTransform>();
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.sizeDelta = Vector2.zero;
-        textRect.anchoredPosition = Vector2.zero;
+        textRect.sizeDelta = rect.sizeDelta;
         
-        Text text = textObj.GetComponent<Text>();
-        text.text = "START";
+        TextMeshProUGUI text = textObj.GetComponent<TextMeshProUGUI>();
+        text.text = "START GAME";
         text.fontSize = 32;
-        text.alignment = TextAnchor.MiddleCenter;
-        Font font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        if (font != null) text.font = font;
+        text.alignment = TextAlignmentOptions.Center;
         text.color = Color.white;
     }
     
@@ -169,32 +151,18 @@ public class ThemePopupCreator : MonoBehaviour
         selectedTheme = theme;
         PlayerPrefs.SetInt("SelectedTheme", theme);
         
-        if (theme == 0)
-        {
-            SelectedXSprite = theme1_X;
-            SelectedOSprite = theme1_O;
-        }
-        else if (theme == 1)
-        {
-            SelectedXSprite = theme2_X;
-            SelectedOSprite = theme2_O;
-        }
-        else if (theme == 2)
-        {
-            SelectedXSprite = theme3_X;
-            SelectedOSprite = theme3_O;
-        }
+        // Logical mapping stays same as requested
+        if (theme == 0) { SelectedXSprite = theme1_X; SelectedOSprite = theme1_O; }
+        else if (theme == 1) { SelectedXSprite = theme2_X; SelectedOSprite = theme2_O; }
+        else if (theme == 2) { SelectedXSprite = theme3_X; SelectedOSprite = theme3_O; }
         
         for (int i = 0; i < highlights.Length; i++)
-        {
-            if (highlights[i] != null)
-                highlights[i].SetActive(i == theme);
-        }
+            if (highlights[i] != null) highlights[i].SetActive(i == theme);
         
         if (startButton != null)
         {
             startButton.interactable = true;
-            startButton.GetComponent<Image>().color = Color.green;
+            startButton.GetComponent<Image>().color = new Color(0.1f, 0.8f, 0.1f); // Success Green
         }
     }
 
