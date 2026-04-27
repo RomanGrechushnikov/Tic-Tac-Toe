@@ -15,43 +15,37 @@ public class GameUIManager : MonoBehaviour
         pixelFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         settingsUI = gameObject.AddComponent<GameSettingsUI>();
 
-        // 1. Define Relative Parameters
-        // Margins based on screen width/height
         float horizontalMargin = Screen.width * 0.04f; 
-        float verticalMargin = Screen.height * 0.02f;
+        // Reduced vertical margin to move HUD higher
+        float verticalMargin = Screen.height * 0.015f; 
 
-        // HUD Widths dependent on display width
-        // Using 25% of width for move counters and 30% for the timer container
         float sideTextWidth = Screen.width * 0.25f;
         float centerTextWidth = Screen.width * 0.3f;
         float hudHeight = Screen.height * 0.06f;
 
-        // Dynamic Font Size tied to the smaller dimension to prevent overflow
         int dynamicFontSize = Mathf.RoundToInt(Mathf.Min(Screen.width, Screen.height) * 0.05f);
 
-        // 2. Timer (Centered top)
+        // 2. Timer - Adjusted position to be closer to the top edge
         timerText = CreateHUDText(canvas, "Timer", new Vector2(0.5f, 1), new Vector2(0.5f, 1), 
             new Vector2(0, -verticalMargin), "Time: 0.0", 
             new Vector2(centerTextWidth, hudHeight), dynamicFontSize);
         timerText.alignment = TextAnchor.UpperCenter;
 
-        // 3. P1 Moves (Left)
+        // 3. P1 Moves
         p1MovesText = CreateHUDText(canvas, "P1Moves", new Vector2(0, 1), new Vector2(0, 1), 
             new Vector2(horizontalMargin, -verticalMargin), "Player 1: 0", 
             new Vector2(sideTextWidth, hudHeight), dynamicFontSize);
         p1MovesText.alignment = TextAnchor.UpperLeft;
 
-        // 4. P2 Moves (Right)
+        // 4. P2 Moves
         p2MovesText = CreateHUDText(canvas, "P2Moves", new Vector2(1, 1), new Vector2(1, 1), 
             new Vector2(-horizontalMargin, -verticalMargin), "Player 2: 0", 
             new Vector2(sideTextWidth, hudHeight), dynamicFontSize);
         p2MovesText.alignment = TextAnchor.UpperRight;
 
-        // 5. Buttons (Widths also tied to display width)
         CreateExitButton(canvas, horizontalMargin, verticalMargin);
         CreateSettingsButton(canvas, horizontalMargin, verticalMargin);
     }
-
     private Text CreateHUDText(Canvas canvas, string name, Vector2 anchor, Vector2 pivot, Vector2 pos, string defaultText, Vector2 size, int fontSize)
     {
         GameObject obj = new GameObject(name, typeof(RectTransform), typeof(Text));
@@ -86,7 +80,7 @@ public class GameUIManager : MonoBehaviour
 
         // Button width based on display width
         float btnWidth = Mathf.Min(Screen.width, Screen.height) * 0.30f;
-        float btnHeight = Screen.height * 0.05f;
+        float btnHeight = Screen.height * 0.11f;
 
         rect.sizeDelta = new Vector2(btnWidth, btnHeight);
         rect.anchoredPosition = new Vector2(-hMargin, vMargin);
@@ -110,7 +104,7 @@ public class GameUIManager : MonoBehaviour
         rect.pivot = new Vector2(0, 0);
         
         float btnWidth = Mathf.Min(Screen.width, Screen.height) * 0.30f;
-        float btnHeight = Screen.height * 0.05f;
+        float btnHeight = Screen.height * 0.11f;
 
         rect.anchoredPosition = new Vector2(hMargin, vMargin);
         rect.sizeDelta = new Vector2(btnWidth, btnHeight);
