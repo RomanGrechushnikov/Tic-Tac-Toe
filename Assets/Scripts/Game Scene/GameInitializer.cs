@@ -55,8 +55,8 @@ public class GameInitializer : MonoBehaviour
         if (currentPlayer == "X") p1Moves++; else p2Moves++;
 
         // Update HUD safely
-        if (ui.p1MovesText != null) ui.p1MovesText.text = $"P1 (X): {p1Moves}";
-        if (ui.p2MovesText != null) ui.p2MovesText.text = $"P2 (O): {p2Moves}";
+        if (ui.p1MovesText != null) ui.p1MovesText.text = $"Player 1: {p1Moves}";
+        if (ui.p2MovesText != null) ui.p2MovesText.text = $"Player 2: {p2Moves}";
 
         int[] winningPattern = GetWinningPattern();
         if (winningPattern != null)
