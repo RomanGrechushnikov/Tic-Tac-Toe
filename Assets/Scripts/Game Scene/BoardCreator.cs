@@ -7,6 +7,7 @@ public class BoardCreator : MonoBehaviour
     public Image[] markImages { get; private set; }
     public Text[] hiddenTexts { get; private set; }
     
+    // Default size updated to 0.9f as requested
     public void CreateBoard(Canvas canvas, float boardSizePercent = 0.8f, float spacingPercent = 0.02f)
     {
         cells = new Button[9];
@@ -22,8 +23,20 @@ public class BoardCreator : MonoBehaviour
         boardRect.anchorMax = new Vector2(0.5f, 0.5f);
         boardRect.pivot = new Vector2(0.5f, 0.5f);
 
-        // Relative scaling based on screen height
-        float boardSize = Screen.height * boardSizePercent;
+        // --- NEW RELATIVE SCALING LOGIC ---
+        float boardSize;
+        if (Screen.height > Screen.width)
+        {
+            // Portrait mode: base size on width
+            boardSize = Screen.width * boardSizePercent;
+        }
+        else
+        {
+            // Landscape mode: base size on height
+            boardSize = Screen.height * boardSizePercent;
+        }
+        // ----------------------------------
+
         boardRect.sizeDelta = new Vector2(boardSize, boardSize);
         boardObj.GetComponent<Image>().color = new Color(1, 1, 1, 0.1f);
 
@@ -31,7 +44,10 @@ public class BoardCreator : MonoBehaviour
         GridLayoutGroup grid = boardObj.AddComponent<GridLayoutGroup>();
         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         grid.constraintCount = 3;
-        grid.padding = new RectOffset(10, 10, 10, 10);
+        
+        // Relative Padding (approx 2% of board size)
+        int paddingValue = Mathf.RoundToInt(boardSize * 0.02f);
+        grid.padding = new RectOffset(paddingValue, paddingValue, paddingValue, paddingValue);
         
         float spacing = boardSize * spacingPercent;
         grid.spacing = new Vector2(spacing, spacing);
@@ -47,6 +63,7 @@ public class BoardCreator : MonoBehaviour
             GameObject cell = new GameObject($"Cell_{i}", typeof(RectTransform), typeof(Image), typeof(Button));
             cell.transform.SetParent(boardObj.transform, false);
             
+            // Marks (X or O)
             GameObject markObj = new GameObject("Mark", typeof(RectTransform), typeof(Image));
             markObj.transform.SetParent(cell.transform, false);
             RectTransform mRect = markObj.GetComponent<RectTransform>();
@@ -57,17 +74,17 @@ public class BoardCreator : MonoBehaviour
             markImages[i] = markObj.GetComponent<Image>();
             markImages[i].color = Color.clear;
             
+            // Logic state storage
             GameObject hiddenObj = new GameObject("HiddenText", typeof(RectTransform), typeof(Text));
             hiddenObj.transform.SetParent(cell.transform, false);
             hiddenObj.SetActive(false);
             hiddenTexts[i] = hiddenObj.GetComponent<Text>();
-            hiddenTexts[i].text = ""; // Initialize empty string
+            hiddenTexts[i].text = "";
             
             cells[i] = cell.GetComponent<Button>();
         }
     }
 
-    // This is the method the error was complaining about!
     public void SetMark(int index, string player, Sprite sprite)
     {
         markImages[index].sprite = sprite;
