@@ -26,8 +26,6 @@ public class GameInitializer : MonoBehaviour
         board = gameObject.AddComponent<BoardCreator>();
         ui = gameObject.AddComponent<GameUIManager>();
         theme = gameObject.AddComponent<ThemeLoader>();
-        gameObject.AddComponent<GameSettingsUI>();
-        
         theme.LoadTheme();
         Canvas canvas = FindAnyObjectByType<Canvas>();
         

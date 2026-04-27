@@ -8,41 +8,10 @@ public class GameSettingsUI : MonoBehaviour
 
     void Start()
     {
-        // Use Legacy font to match the "basic/retro" look in your screenshot
         pixelFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-        CreateSettingsButton();
     }
 
-    void CreateSettingsButton()
-    {
-        Canvas canvas = FindAnyObjectByType<Canvas>();
-        if (canvas == null) return;
-
-        // Gear/Settings Button in Corner
-        GameObject btnObj = new GameObject("Btn_Settings_Open", typeof(RectTransform), typeof(Image), typeof(Button));
-        btnObj.transform.SetParent(canvas.transform, false);
-        
-        RectTransform rect = btnObj.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(1, 1);
-        rect.anchorMax = new Vector2(1, 1);
-        rect.pivot = new Vector2(1, 1);
-        rect.sizeDelta = new Vector2(120, 50);
-        rect.anchoredPosition = new Vector2(-20, -20);
-
-        btnObj.GetComponent<Image>().color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
-        
-        GameObject textObj = new GameObject("Text", typeof(RectTransform), typeof(Text));
-        textObj.transform.SetParent(btnObj.transform, false);
-        Text t = textObj.GetComponent<Text>();
-        t.text = "SETTINGS";
-        t.font = pixelFont;
-        t.alignment = TextAnchor.MiddleCenter;
-        t.color = Color.white;
-        ((RectTransform)textObj.transform).sizeDelta = rect.sizeDelta;
-
-        btnObj.GetComponent<Button>().onClick.AddListener(ShowSettings);
-    }
-
+    
     public void ShowSettings()
     {
         if (settingsPanel == null) CreateSettingsPopup();
