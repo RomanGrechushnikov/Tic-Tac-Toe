@@ -55,8 +55,14 @@ public class GameUIManager : MonoBehaviour
         rect.anchorMin = new Vector2(0, 1);
         rect.anchorMax = new Vector2(0, 1);
         rect.pivot = new Vector2(0, 1);
-        rect.anchoredPosition = new Vector2(20, -20);
-        rect.sizeDelta = new Vector2(100, 40);
+        
+        // Scale relative to WIDTH for horizontal consistency
+        float btnWidth = Screen.width * 0.12f;  // 12% of screen width
+        float btnHeight = btnWidth * 0.4f;      // Maintain a 2.5:1 aspect ratio
+        float margin = Screen.width * 0.02f;    // 2% margin from the left edge
+        
+        rect.anchoredPosition = new Vector2(margin, -margin);
+        rect.sizeDelta = new Vector2(btnWidth, btnHeight);
 
         btnObj.GetComponent<Image>().color = new Color(0.7f, 0.2f, 0.2f, 1f);
         btnObj.GetComponent<Button>().onClick.AddListener(() => SceneManager.LoadScene("SampleScene"));
@@ -67,7 +73,9 @@ public class GameUIManager : MonoBehaviour
         t.text = "EXIT";
         t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
         t.alignment = TextAnchor.MiddleCenter;
-        t.color = Color.white;
+        
+        // Font size relative to the new button height
+        t.fontSize = Mathf.RoundToInt(btnHeight * 0.5f); 
         ((RectTransform)textObj.transform).sizeDelta = rect.sizeDelta;
     }
 }
