@@ -13,32 +13,41 @@ public class GameUIManager : MonoBehaviour
     public void CreateHUD(Canvas canvas)
     {
         pixelFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-
-        // Initialize Settings Logic
         settingsUI = gameObject.AddComponent<GameSettingsUI>();
 
-        // 1. Define Relative Parameters based on Screen size
-        float horizontalMargin = Screen.width * 0.04f;   // 4% margin
-        float verticalMargin = Screen.height * 0.02f;   // 2% margin
-        Vector2 textSize = new Vector2(Screen.width * 0.2f, Screen.height * 0.06f);
-        int dynamicFontSize = Mathf.RoundToInt(Screen.height * 0.05f);
+        // 1. Define Relative Parameters
+        // Margins based on screen width/height
+        float horizontalMargin = Screen.width * 0.04f; 
+        float verticalMargin = Screen.height * 0.02f;
 
-        // 2. Timer (Centered at the very top)
+        // HUD Widths dependent on display width
+        // Using 25% of width for move counters and 30% for the timer container
+        float sideTextWidth = Screen.width * 0.25f;
+        float centerTextWidth = Screen.width * 0.3f;
+        float hudHeight = Screen.height * 0.06f;
+
+        // Dynamic Font Size tied to the smaller dimension to prevent overflow
+        int dynamicFontSize = Mathf.RoundToInt(Mathf.Min(Screen.width, Screen.height) * 0.05f);
+
+        // 2. Timer (Centered top)
         timerText = CreateHUDText(canvas, "Timer", new Vector2(0.5f, 1), new Vector2(0.5f, 1), 
-            new Vector2(0, -verticalMargin), "Time: 0.0", textSize, dynamicFontSize);
+            new Vector2(0, -verticalMargin), "Time: 0.0", 
+            new Vector2(centerTextWidth, hudHeight), dynamicFontSize);
         timerText.alignment = TextAnchor.UpperCenter;
 
-        // 3. P1 Moves (Top Left)
+        // 3. P1 Moves (Left)
         p1MovesText = CreateHUDText(canvas, "P1Moves", new Vector2(0, 1), new Vector2(0, 1), 
-            new Vector2(horizontalMargin, -verticalMargin), "Player 1: 0", textSize, dynamicFontSize);
+            new Vector2(horizontalMargin, -verticalMargin), "Player 1: 0", 
+            new Vector2(sideTextWidth, hudHeight), dynamicFontSize);
         p1MovesText.alignment = TextAnchor.UpperLeft;
 
-        // 4. P2 Moves (Top Right)
+        // 4. P2 Moves (Right)
         p2MovesText = CreateHUDText(canvas, "P2Moves", new Vector2(1, 1), new Vector2(1, 1), 
-            new Vector2(-horizontalMargin, -verticalMargin), "Player 2: 0", textSize, dynamicFontSize);
+            new Vector2(-horizontalMargin, -verticalMargin), "Player 2: 0", 
+            new Vector2(sideTextWidth, hudHeight), dynamicFontSize);
         p2MovesText.alignment = TextAnchor.UpperRight;
 
-        // 5. Buttons
+        // 5. Buttons (Widths also tied to display width)
         CreateExitButton(canvas, horizontalMargin, verticalMargin);
         CreateSettingsButton(canvas, horizontalMargin, verticalMargin);
     }
@@ -60,6 +69,8 @@ public class GameUIManager : MonoBehaviour
         t.font = pixelFont;
         t.fontSize = fontSize;
         t.color = Color.white;
+        // Ensure text doesn't wrap if it exceeds the width
+        t.horizontalOverflow = HorizontalWrapMode.Overflow; 
         return t;
     }
 
@@ -69,18 +80,18 @@ public class GameUIManager : MonoBehaviour
         btnObj.transform.SetParent(canvas.transform, false);
         
         RectTransform rect = btnObj.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(1, 0); // Bottom Right
+        rect.anchorMin = new Vector2(1, 0); 
         rect.anchorMax = new Vector2(1, 0);
         rect.pivot = new Vector2(1, 0);
 
-        float btnWidth = Screen.width * 0.12f;
-        float btnHeight = btnWidth * 0.4f;
+        // Button width based on display width
+        float btnWidth = Mathf.Min(Screen.width, Screen.height) * 0.30f;
+        float btnHeight = Screen.height * 0.05f;
 
         rect.sizeDelta = new Vector2(btnWidth, btnHeight);
         rect.anchoredPosition = new Vector2(-hMargin, vMargin);
 
         btnObj.GetComponent<Image>().color = new Color(0.15f, 0.15f, 0.15f, 0.9f);
-        
         CreateButtonText(btnObj.transform, "SETTINGS", btnHeight);
 
         btnObj.GetComponent<Button>().onClick.AddListener(() => {
@@ -94,12 +105,12 @@ public class GameUIManager : MonoBehaviour
         btnObj.transform.SetParent(canvas.transform, false);
         
         RectTransform rect = btnObj.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0, 0); // Bottom Left
+        rect.anchorMin = new Vector2(0, 0); 
         rect.anchorMax = new Vector2(0, 0);
         rect.pivot = new Vector2(0, 0);
         
-        float btnWidth = Screen.width * 0.12f;
-        float btnHeight = btnWidth * 0.4f;
+        float btnWidth = Mathf.Min(Screen.width, Screen.height) * 0.30f;
+        float btnHeight = Screen.height * 0.05f;
 
         rect.anchoredPosition = new Vector2(hMargin, vMargin);
         rect.sizeDelta = new Vector2(btnWidth, btnHeight);
@@ -121,7 +132,7 @@ public class GameUIManager : MonoBehaviour
         t.text = label;
         t.font = pixelFont;
         t.alignment = TextAnchor.MiddleCenter;
-        t.fontSize = Mathf.RoundToInt(btnHeight * 0.5f);
+        t.fontSize = Mathf.RoundToInt(btnHeight * 0.4f);
         t.color = Color.white;
     }
 }
